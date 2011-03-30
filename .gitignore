@@ -1,0 +1,18 @@
+# stuff to ignore from sbt
+project/boot/
+project/plugins/project/
+target/
+lib_managed/
+src_managed/
+project/boot/
+
+# my log directory
+log/
+
+# don't commit the intellij stuff, run "sbt idea" to generate
+*.ipr
+*.iml
+*.iws
+.idea/
+out/
+
