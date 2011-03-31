@@ -4,7 +4,7 @@ package zapush
 
 object Config {
   lazy val zabbixServer = mandatorySystemProperty("zabbix.server")
-  lazy val zabbixServerPort = System.getProperty("zabbix.push.interval.secs", "10051").toInt
+  lazy val zabbixServerPort = System.getProperty("zabbix.server.port", "10051").toInt
   lazy val zabbixHostname = mandatorySystemProperty("zabbix.hostname")
   lazy val zabbixAppname = mandatorySystemProperty("zabbix.appname")
   lazy val zabbixPushIntervalSeconds = System.getProperty("zabbix.push.interval.secs", "60").toInt
