@@ -1,12 +1,12 @@
 <configuration>
 
-    <contextName>zabbix-push</contextName>
+    <contextName>zapush</contextName>
 
     <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/zabbix-push.log</file>
+        <file>log/zapush.log</file>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/zabbix-push.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <fileNamePattern>log/zapush.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
 

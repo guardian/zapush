@@ -12,11 +12,13 @@ object MBeans {
   def all = mbeanNames.map(new MBean(_))
 }
 
-case class MBeanProperty(objectName: ObjectName, propertyName: String, attributeType: String) {
-  lazy val zabbixName = Config.zabbixAppname + ":" + objectName.toString + ":" + propertyName
+case class MBeanProperty(bean: MBean, propertyName: String, attributeType: String) {
+  lazy val objectName = bean.name
+  lazy val zabbixName = "java[" + Config.zabbixAppname + ":" + objectName.toString + ":" + propertyName + "]"
+  def value = bean(propertyName)
 }
 
-class MBean(name: ObjectName) {
+class MBean(val name: ObjectName) {
   lazy val mbeanServer = ManagementFactory.getPlatformMBeanServer
 
   // naming convention:
@@ -36,16 +38,16 @@ class MBean(name: ObjectName) {
         case c: CompositeType =>
           c.keySet.toList.flatMap(itemName => parseOpenType(path + "." + itemName, c.getType(itemName)))
         case arr: ArrayType[_] =>
-          List(MBeanProperty(name, path, "Array[" + arr.getElementOpenType.getTypeName + "]"))
+          List(MBeanProperty(this, path, "Array[" + arr.getElementOpenType.getTypeName + "]"))
         case other =>
-          List(MBeanProperty(name, path, other.getTypeName))
+          List(MBeanProperty(this, path, other.getTypeName))
       }
 
       attr match {
         case open: OpenMBeanAttributeInfo =>
           parseOpenType(attr.getName, open.getOpenType)
         case closed: MBeanAttributeInfo =>
-          List(MBeanProperty(name, attr.getName, closed.getType))
+          List(MBeanProperty(this, attr.getName, closed.getType))
       }
     }
 
