@@ -11,11 +11,11 @@
         </rollingPolicy>
 
 		<encoder>
-			<pattern>%date [%thread] %-5level %logger{36} - %msg%n%xException{3}</pattern>
+			<pattern>%date [%thread] %-5level %logger{36} - %msg%n%xException{10}</pattern>
 		</encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="LOGFILE"/>
     </root>
 

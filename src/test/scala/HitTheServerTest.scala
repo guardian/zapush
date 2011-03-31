@@ -8,29 +8,7 @@ import scalax.io.OutputConverter._
 import scalax.io.Resource
 import net.liftweb.json.JsonDSL._
 import net.liftweb.json._
-
-trait ZabbixJsonMessage
-case class ZabbixSenderData(request: String = "sender data", data: List[Data]) extends ZabbixJsonMessage
-case class Data(host: String, key: String, value: String)
-
-case class ZabbixSenderDataResponse(response: String, info: String)
-
-
-case class ZabbixMessage(message: String) {
-  lazy val asBytes: List[Byte] = ZabbixMessage.header ::: size ::: payloadBytes
-  lazy val payloadBytes = message.getBytes("ASCII").toList
-  lazy val length = payloadBytes.size
-  lazy val size = LongConverter.toBytes(length).toList.reverse
-}
-
-object ZabbixMessage {
-  val header = List[Byte]('Z', 'B', 'X', 'D', 1)
-  val sizeLen = LongConverter.sizeInBytes
-
-  def parse(m: List[Byte]) =
-    new String(m.drop(ZabbixMessage.header.length + ZabbixMessage.sizeLen).toArray, "ASCII")
-}
-
+import zapush.{ZabbixSenderDataResponse, Data, ZabbixSenderData, ZabbixMessage}
 
 class ZabbixMessageTest extends FlatSpec with ShouldMatchers {
   val msg = List[Byte]('Z', 'B', 'X', 'D', 1, 5, 0, 0, 0, 0, 0, 0, 0, 114, 114)
@@ -71,7 +49,7 @@ class HitTheServerTest extends FunSuite {
 
   test("sending a trap") {
 
-    val data = ZabbixSenderData(data = List(Data("gnm40836", "java.test.blah", "17")))
+    val data = ZabbixSenderData(data = List(Data("gnm40836", "java.test.blahx", "17")))
 
     val socket = new Socket("gnm40833.int.gnl", 10051)
 
