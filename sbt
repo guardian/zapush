@@ -5,9 +5,16 @@
 # and
 # http://code.google.com/p/simple-build-tool/wiki/GeneralizedLauncher#Configuration
 java -Xmx512M -XX:MaxPermSize=250m \
-	-Dhttp.proxyHost=devscreen.gudev.gnl -Dhttp.proxyPort=3128 \
+       -XX:+UseConcMarkSweepGC \
+       -XX:+CMSClassUnloadingEnabled \
+       -XX:+UseCompressedOops \
 	-Dzabbix.server=gnm40833.int.gnl \
 	-Dzabbix.server.port=10051 \
 	-Dzabbix.hostname=gnm40836 \
 	-Dzabbix.appname=sbt \
 	-jar `dirname $0`/sbt-launch-0.7.4.jar @sbt.scalasources.boot.properties "$@"
+
+
+#             -XX:+PrintGCDetails \
+#                -XX:+PrintGCDateStamps \
+   

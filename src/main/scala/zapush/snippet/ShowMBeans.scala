@@ -8,6 +8,6 @@ class ShowMBeans {
   def render = "li" #> MBeans.all.flatMap(_.properties).sortBy(_.zabbixName).map { prop =>
       ".prop-name *" #> prop.zabbixName &
       ".prop-type" #> prop.attributeType &
-      ".prop-value" #> tryo { Text(prop.value) }.openOr(<strong>error!</strong>)
+      ".prop-value" #> tryo { Text(prop.value.toString) }.openOr(<strong>error!</strong>)
   }
 }

@@ -18,6 +18,26 @@ case class MBeanProperty(bean: MBean, propertyName: String, attributeType: Strin
   def value = bean(propertyName)
 }
 
+case class MBeanValue(rawValue: AnyRef) {
+  override def toString = rawValue match {
+    case a: Array[_] => a.mkString(", ")
+    case t: TabularData => "[tabular data not yet supported by zapush]"
+    case m: Map[_, _] => m.mkString("map: ", ", ", "end")
+    case other => other.toString
+  }
+
+  def child(childName: String): MBeanValue = {
+    rawValue match {
+      case c: CompositeData => MBeanValue(c.get(childName))
+      case t: TabularData => error("tabular data not yet supported by zapush")
+//        t.values
+//          .collect { case cd: CompositeData if cd.get("key") == childName => MBeanValue(cd.get("value")) }
+//          .headOption.getOrElse(error("failed to parse tabular data for " + childName + " from " + rawValue))
+      case _ => error("could not find child named " + childName + " from " + rawValue)
+    }
+  }
+}
+
 class MBean(val name: ObjectName) {
   lazy val mbeanServer = ManagementFactory.getPlatformMBeanServer
 
@@ -56,28 +76,22 @@ class MBean(val name: ObjectName) {
 
   def apply(attributeName: String) = {
 
-    def getValue(attributeName: String): Any =
-      attributeName.split('.').toList match {
-        case Nil => error("bad attibute name: " + attributeName)
-        case value :: Nil =>
-          mbeanServer.getAttribute(name, value)
-        case compositeName :: rest =>
-          parseComposite(rest, mbeanServer.getAttribute(name, compositeName).asInstanceOf[CompositeData])
+    def parseComposite(path: List[String], data: MBeanValue): MBeanValue =
+      path match {
+        case Nil => error("erm something went wong")
+        case key :: Nil => data.child(key)
+        case key :: rest => parseComposite(rest, data.child(key))
       }
 
-    def parseComposite(path: List[String], data: CompositeData): Any = path match {
-      case Nil => error("erm something went wong")
-      case key :: Nil => data.get(key)
-      case key :: rest => parseComposite(rest, data.get(key).asInstanceOf[CompositeData])
-    }
-
-    getValue(attributeName) match {
-      case a: Array[_] => a.mkString(", ")
-      case m: Map[_, _] => m.mkString("map: ", ", ", "end")
-      case m: java.util.Map[_, _] => m.mkString("java map: ", ", ", "end")
-      case other => other.toString
+    attributeName.split('.').toList match {
+      case Nil => error("bad attibute name: " + attributeName)
+      case value :: Nil =>
+        MBeanValue(mbeanServer.getAttribute(name, value))
+      case compositeName :: rest =>
+        parseComposite(rest, MBeanValue(mbeanServer.getAttribute(name, compositeName)))
     }
   }
+
 
 
 

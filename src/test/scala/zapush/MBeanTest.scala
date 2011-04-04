@@ -9,7 +9,7 @@ import javax.management.openmbean._
 
 class MBeanTest extends FlatSpec with ShouldMatchers {
   val mbeanServer = ManagementFactory.getPlatformMBeanServer
-  val testObject = new ObjectName("java.lang:type=MemoryPool,name=PS Perm Gen")
+  val testObject = new ObjectName("java.lang:type=MemoryPool,name=CMS Perm Gen")
   val bean = new MBean(testObject)
 
   "mbean wrapper" should "read composite properties" in {
@@ -21,5 +21,26 @@ class MBeanTest extends FlatSpec with ShouldMatchers {
     println("bean name = " + bean("Name"))
     println("bean usage max = " + bean("Usage.max"))
   }
+
+//  it should "be able to read some crazy properties" in {
+//    val gc = new ObjectName("java.lang:type=GarbageCollector,name=ConcurrentMarkSweep")
+//    val gcBean = new MBean(gc)
+//
+//    val actualValue = gcBean("LastGcInfo.memoryUsageAfterGc.CMS Old Gen.init")
+//    println("actual value = " + actualValue.toString)
+//
+//  }
+//
+//
+//  it should "return crazy properties in the list of properties" in {
+//    val gc = new ObjectName("java.lang:type=GarbageCollector,name=ConcurrentMarkSweep")
+//    val gcBean = new MBean(gc)
+//
+//    (gcBean.properties).find(_.propertyName == "LastGcInfo.memoryUsageAfterGc.CMS Old Gen.init") should be ('defined)
+//
+//
+//  }
+
+
 
 }

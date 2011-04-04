@@ -48,7 +48,7 @@ object Sender extends Loggable {
       property <- mbean.properties
       value <- tryo { mbean(property.propertyName) }
     } yield {
-      Data(Config.zabbixHostname, property.zabbixName, value)
+      Data(Config.zabbixHostname, property.zabbixName, value.toString)
     }
 }
 
