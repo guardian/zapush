@@ -15,8 +15,20 @@
 		</encoder>
     </appender>
 
-    <root level="DEBUG">
+    <!-- display errors to stdout as well -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+           <level>ERROR</level>
+         </filter>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36} - %msg%n%xException{10}</pattern>
+        </encoder>
+      </appender>
+
+
+    <root level="${logback.loglevel:-INFO}">
         <appender-ref ref="LOGFILE"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
 </configuration>

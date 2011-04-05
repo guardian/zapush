@@ -1,5 +1,8 @@
-1. DONE - fix the log directory name
-2. see if I can crack open stats like java[soulmates-api:java.lang:type=GarbageCollector,name=Copy:LastGcInfo.memoryUsageAfterGc]
-3. come up with a list of what I think should be monitored
-4. (understand why your jvm has two garbage collectors, ConcurrentMarkSweep and Copy - on my machine I have "PS MarkSweep" and "PS Scavenge", I suspect this is becuase I have an old jvm version but want to find out)
-5. create a template autogeneration page
+1. see if we can crack open TabularData stats like
+    java[<appname>:java.lang:type=GarbageCollector,name=Copy:LastGcInfo.memoryUsageAfterGc]
+
+2. create a template autogeneration page to make it easier to include definitions in zabbix
+
+3. expose as json / xml too?
+
+4. behave more sensibly when config values not provided

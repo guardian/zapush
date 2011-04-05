@@ -8,7 +8,12 @@ import java.util.concurrent.{TimeUnit, ThreadFactory, Executors}
 object Scheduler {
   private var service = Executors.newSingleThreadScheduledExecutor(TF)
 
-  def start() { service.scheduleAtFixedRate(cmd, 5, Config.zabbixPushIntervalSeconds, TimeUnit.SECONDS) }
+  def start() {
+    // only start scheduling if we have a valid zabbix context
+    for (zabbix <- Config.zabbix) {
+      service.scheduleAtFixedRate(cmd, 5, zabbix.pushIntervalSecs, TimeUnit.SECONDS)
+    }
+  }
   def stop() { service.shutdown() }
 
   lazy val cmd = new Runnable { def run() { Sender.sendNow() } }
