@@ -5,4 +5,4 @@
 
 3. expose as json / xml too?
 
-4. behave more sensibly when config values not provided
+4. report a version number
