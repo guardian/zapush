@@ -6,7 +6,7 @@ Why another zabbix - jvm bridge?
 
 Zapush aims provides a simple way to monitor java processes with [Zabbix](http://www.zabbix.com). Java processes
 already expose many interesting stats using the Java Management Extensions (JMX) and it's relatively
-easy to expose more custom status using JMX. However the "java" way of
+easy to expose more custom stats using JMX. However the "java" way of
 obtaining these stats remotely requires use of RMI
 [which is typically painful to get through firewalls](http://java.sun.com/developer/onlineTraining/rmi/RMI.html#FirewallIssues).
 
@@ -87,19 +87,19 @@ Zapush uses system properties for configuration:
 
 <table>
     <tr>
-        <td>zabbix.server</td>
+        <td>`zabbix.server`</td>
         <td>The hostname of the zabbix server or proxy to send data to (mandatory, no default)</td>
     </tr><tr>
-        <td>zabbix.server.port</td>
+        <td>`zabbix.server.port`</td>
         <td>The port to talking to on the zabbix server or proxy (default: 10051)</td>
     </tr><tr>
-        <td>zabbix.hostname</td>
+        <td>`zabbix.hostname`</td>
         <td>The name that zabbix knows this host by (default: java's best effort discovery of the local hostname)</td>
     </tr><tr>
-        <td>zabbix.appname</td>
+        <td>`zabbix.appname`</td>
         <td>String to include at the start of each key, used when running multiple containers on the same machine (default: zapush)</td>
     </tr><tr>
-        <td>zabbix.push.interval.secs</td>
+        <td>`zabbix.push.interval.secs`</td>
         <td>How often to send a trap to zabbix (default: 60)</td>
     </tr>
 </table>
